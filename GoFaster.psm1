@@ -1,4 +1,28 @@
 ﻿<#
+A "quick & dirty" method for building, then running a Go executable.
+Useful for when you have a bunch of .go files in a directory. Windows doesn't do wildcard expansion so "go run *.go" doesn't work.
+go build will work and considers *.go by default so this builds using a temp executable name, runs it (if no build errors), and then deletes it.
+**To be called only when in the go package root!**
+#>
+function GoBuildNRun()
+{
+    $tmpOutputFile = [Guid]::NewGuid().ToString() + ".exe";
+    $buildResult = (go build -o $tmpOutputFile 2>&1) | Out-String;
+
+    if ([String]::IsNullOrEmpty($buildResult))
+    {
+        & ".\$tmpOutputFile";
+        rm $tmpOutputFile;
+    }
+    else
+    {
+        Write-Host "One or more errors occurred!" -ForegroundColor Red;
+        $buildResult;
+    }
+}
+Set-Alias gRun GoBuildNRun;
+
+<#
 Shortcut for jumping to GOPATH workspace
 #>
 function GoHome()
