@@ -51,19 +51,19 @@ function RunPackageCommand([string]$Operation, [string]$PackageName, [string]$Pa
     else
     {
         Write-Host "Operation must be specified!" -ForegroundColor Red;
-        Exit;
+        break;
     }
 
     if ($Operation -notin $supportedOperations)
     {
         Write-Host "Only the following operations are supported: $supportedOperations" -ForegroundColor Red;
-        Exit;
+        break;
     }
 
     if ([string]::IsNullOrEmpty($PackageName))
     {
         Write-Host "Must provide a package to $operation." -ForegroundColor Red;
-        Exit;
+        break;
     }
 
     if ([string]::IsNullOrEmpty($PackagePath))
